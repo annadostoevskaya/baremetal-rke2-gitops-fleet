@@ -1,0 +1,24 @@
+#!ipxe
+# Automated bare-metal fleet network boot script
+# Routes physical nodes to automated Kickstart installer
+
+set base-url http://10.10.0.10/os/oraclelinux9
+
+menu Fleet Provisioning Menu
+item --default ol9-auto Install Oracle Linux 9 (Automated Kickstart)
+item ol9-rescue        Oracle Linux Rescue Shell
+item local             Boot from local hard drive
+choose --timeout 5000 target && goto ${target}
+
+:ol9-auto
+kernel ${base-url}/vmlinuz initrd=initrd.img inst.repo=${base-url} inst.ks=http://10.10.0.10/kickstart/oracle-linux-9.ks ip=dhcp quiet
+initrd ${base-url}/initrd.img
+boot
+
+:ol9-rescue
+kernel ${base-url}/vmlinuz initrd=initrd.img inst.repo=${base-url} rescue ip=dhcp
+initrd ${base-url}/initrd.img
+boot
+
+:local
+exit
