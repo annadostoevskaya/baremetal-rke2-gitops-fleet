@@ -1,0 +1,28 @@
+# RKE2 Server Configuration (CIS-Hardened)
+token: "REPLACE_WITH_SECURE_CLUSTER_SECRET_TOKEN"
+tls-san:
+  - "10.10.0.100"
+  - "k8s.infra.internal"
+  - "ctrl-01.infra.internal"
+  - "ctrl-02.infra.internal"
+  - "ctrl-03.infra.internal"
+
+cni:
+  - "cilium"
+
+disable:
+  - "rke2-ingress-nginx" # Managed declaratively via FluxCD
+
+kube-apiserver-arg:
+  - "profiling=false"
+  - "audit-log-maxbackup=10"
+  - "audit-log-maxsize=100"
+  - "audit-log-path=/var/lib/rancher/rke2/server/logs/audit.log"
+
+kube-controller-manager-arg:
+  - "profiling=false"
+  - "terminated-pod-gc-threshold=1000"
+
+kubelet-arg:
+  - "protect-kernel-defaults=true"
+  - "max-pods=110"
